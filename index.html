@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Instagram Bio Generator | CodeCraze</title>
+    <meta name="description" content="Generate stylish Instagram Bios in one click. Cute, Savage, Motivational & Funny bios ready to copy!">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="https://cdn.pixabay.com/photo/2016/09/17/07/03/instagram-1675670_960_720.png" type="image/png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS Libraries -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    
+    <style id="app-style">
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff7eb9 0%, #8c52ff 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --card-radius: 20px;
+            --button-bg: linear-gradient(135deg, #ff7eb9 0%, #8c52ff 70%);
+            --dark-bg: #111111;
+            --light-bg: #f5f5f7;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--light-bg);
+            color: #333;
+            min-height: 100vh;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            transition: background 0.3s ease, color 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        
+        body.dark-mode {
+            background: var(--dark-bg);
+            color: #f5f5f7;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 10px;
+            position: relative;
+        }
+        
+        .title {
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .subtitle {
+            font-weight: 400;
+            color: #888;
+            margin-bottom: 30px;
+        }
+        
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: var(--card-radius);
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: var(--glass-shadow);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 80%);
+            transform: rotate(30deg);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.8);
+            backdrop-filter: blur(5px);
+            font-size: 1rem;
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        
+        body.dark-mode .form-control {
+            background: rgba(30,30,30,0.8);
+            color: #fff;
+            border-color: rgba(255,255,255,0.1);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #8c52ff;
+            box-shadow: 0 0 0 3px rgba(140, 82, 255, 0.2);
+            animation: glow 1.5s infinite alternate;
+        }
+        
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px rgba(140, 82, 255, 0.2); }
+            100% { box-shadow: 0 0 15px rgba(140, 82, 255, 0.4); }
+        }
+        
+        .generate-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: var(--button-bg);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transform: translateY(0);
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 6px 12px rgba(140, 82, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(140, 82, 255, 0.3);
+        }
+        
+        .generate-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 4px 8px rgba(140, 82, 255, 0.2);
+        }
+        
+        .generate-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255,255,255,0.2), transparent);
+            opacity: 0.2;
+        }
+        
+        .result-container {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        .result-container.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .bio-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid var(--glass-border);
+        }
+        
+        .copy-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            background: var(--button-bg);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-left: auto;
+        }
+        
+        .copy-btn i {
+            margin-right: 6px;
+        }
+        
+        .copy-success {
+            display: none;
+            background: #4caf50;
+            color: white;
+            border-radius: 10px;
+            padding: 10px 20px;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: fadeInOut 2s ease;
+        }
+        
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+            15% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            85% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+        }
+        
+        .insta-preview {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .preview-title {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .preview-title i {
+            margin-right: 6px;
+            color: #ff7eb9;
+        }
+        
+        .profile-card {
+            width: 100%;
+            max-width: 350px;
+            padding: 15px;
+            border-radius: var(--card-radius);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #ddd;
+            margin-right: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-info {
+            flex: 1;
+        }
+        
+        .profile-username {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            font-size: 0.8rem;
+            color: #888;
+        }
+        
+        .stat {
+            margin-right: 15px;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: inherit;
+        }
+        
+        .profile-bio {
+            width: 100%;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-top: 10px;
+        }
+        
+        .trending-bios {
+            margin-top: 40px;
+            position: relative;
+        }
+        
+        .trending-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .trending-title i {
+            margin-right: 8px;
+            color: #ff7eb9;
+        }
+        
+        .trending-slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 10px 0;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+            gap: 15px;
+        }
+        
+        .trending-slider::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .trending-item {
+            min-width: 250px;
+            padding: 15px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--card-radius);
+            backdrop-filter: blur(5px);
+        }
+        
+        .trending-bio {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .slider-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #333;
+            z-index: 2;
+            transition: all 0.2s;
+        }
+        
+        body.dark-mode .slider-control {
+            color: #fff;
+            background: rgba(0,0,0,0.2);
+        }
+        
+        .slider-control:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .slider-prev {
+            left: -20px;
+        }
+        
+        .slider-next {
+            right: -20px;
+        }
+        
+        .share-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .share-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 15px;
+            border-radius: 10px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            cursor: pointer;
+            color: inherit;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            text-decoration: none;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .share-btn i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+        
+        .whatsapp { color: #25D366; }
+        .instagram { color: #E1306C; }
+        .link { color: #0088cc; }
+        
+        .toggle-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+        }
+        
+        .toggle-mode {
+            width: 50px;
+            height: 24px;
+            border-radius: 12px;
+            background: #ddd;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        body.dark-mode .toggle-mode {
+            background: #555;
+        }
+        
+        .toggle-handle {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+        
+        body.dark-mode .toggle-handle {
+            transform: translateX(26px);
+            background: #333;
+        }
+        
+        .toggle-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 7px;
+            box-sizing: border-box;
+            font-size: 12px;
+        }
+        
+        .toggle-icons .sun {
+            color: #ff9800;
+        }
+        
+        .toggle-icons .moon {
+            color: #b0bec5;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px 0;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        .footer a {
+            color: inherit;
+            text-decoration: none;
+        }
+        
+        .heart {
+            color: #ff5252;
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            5% { transform: scale(1.2); }
+            10% { transform: scale(1); }
+            15% { transform: scale(1.2); }
+            20% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+        
+        .customize-toggle {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .customize-label {
+            margin-left: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .customize-switch {
+            position: relative;
+            width: 40px;
+            height: 20px;
+            border-radius: 10px;
+            background: #ddd;
+            transition: background 0.3s ease;
+        }
+        
+        .customize-switch.active {
+            background: #8c52ff;
+        }
+        
+        .customize-handle {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #fff;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+        }
+        
+        .customize-switch.active .customize-handle {
+            transform: translateX(20px);
+        }
+        
+        .editable-bio {
+            min-height: 100px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255,255,255,0.1);
+            margin-top: 10px;
+            outline: none;
+            display: none;
+        }
+        
+        .editable-bio:focus {
+            border-color: #8c52ff;
+        }
+        
+        /* Confetti Animation */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #f00;
+            border-radius: 0;
+            z-index: 999;
+            will-change: transform;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 15px;
+            }
+            
+            .glass-card {
+                padding: 20px;
+            }
+            
+            .slider-control {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .slider-prev {
+                left: -15px;
+            }
+            
+            .slider-next {
+                right: -15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .title {
+                font-size: 1.7rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .form-control {
+                padding: 12px;
+            }
+            
+            .generate-btn {
+                padding: 14px;
+            }
+            
+            .bio-text {
+                font-size: 1rem;
+            }
+            
+            .slider-control {
+                display: none;
+            }
+            
+            .share-buttons {
+                gap: 10px;
+            }
+            
+            .share-btn {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .footer {
+                margin-top: 30px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">Instagram Bio Generator</h1>
+            <p class="subtitle">Create your perfect Instagram bio in seconds</p>
+            
+            <div class="toggle-container">
+                <div class="toggle-mode">
+                    <div class="toggle-icons">
+                        <span class="sun"><i class="fas fa-sun"></i></span>
+                        <span class="moon"><i class="fas fa-moon"></i></span>
+                    </div>
+                    <div class="toggle-handle"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="glass-card">
+            <div class="form-group">
+                <label for="name-input" class="form-label">Type your Name</label>
+                <input type="text" id="name-input" class="form-control" placeholder="e.g. Sarah" autofocus>
+            </div>
+            
+            <div class="form-group">
+                <label for="category-select" class="form-label">Select Bio Category</label>
+                <select id="category-select" class="form-control">
+                    <option value="" disabled selected>Choose a style</option>
+                    <option value="cute">Cute</option>
+                    <option value="savage">Savage</option>
+                    <option value="motivational">Motivational</option>
+                    <option value="funny">Funny</option>
+                    <option value="aesthetic">Aesthetic</option>
+                    <option value="custom">Custom</option>
+                </select>
+            </div>
+            
+            <button id="generate-btn" class="generate-btn">
+                <span>Generate Bio</span>
+            </button>
+        </div>
+        
+        <div id="result-container" class="result-container glass-card">
+            <h3>Your Bio</h3>
+            <p id="bio-text" class="bio-text">Your generated bio will appear here...</p>
+            
+            <div class="customize-toggle">
+                <div class="customize-switch">
+                    <div class="customize-handle"></div>
+                </div>
+                <span class="customize-label">Customize Bio</span>
+            </div>
+            
+            <div id="editable-bio" class="editable-bio" contenteditable="true"></div>
+            
+            <button id="copy-btn" class="copy-btn">
+                <i class="fas fa-copy"></i> Copy to Clipboard
+            </button>
+        </div>
+        
+        <div id="insta-preview" class="insta-preview glass-card">
+            <div class="preview-title">
+                <i class="fab fa-instagram"></i> Insta Preview
+            </div>
+            
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <img id="profile-img" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png" alt="Profile">
+                    </div>
+                    
+                    <div class="profile-info">
+                        <div id="profile-username" class="profile-username">username</div>
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <span class="stat-value">42</span> posts
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">846</span> followers
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">267</span> following
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="profile-bio" class="profile-bio">
+                    Your bio will appear here...
+                </div>
+            </div>
+        </div>
+        
+        <div class="trending-bios glass-card">
+            <div class="trending-title">
+                <i class="fas fa-chart-line"></i> Trending Bios
+            </div>
+            
+            <div class="slider-control slider-prev">
+                <i class="fas fa-chevron-left"></i>
+            </div>
+            
+            <div class="trending-slider" id="trending-slider">
+                <div class="trending-item">
+                    <div class="trending-bio">✨ Making memories one adventure at a time | Coffee lover | Dreamer</div>
+                </div>
+                <div class="trending-item">
+                    <div class="trending-bio">🌈 Creating my own sunshine | Professional overthinker | Dog mom</div>
+                </div>
+                <div class="trending-item">
+                    <div class="trending-bio">🔥 Too busy turning my dreams into reality | CEO of bad decisions</div>
+                </div>
+                <div class="trending-item">
+                    <div class="trending-bio">🌊 Salt in the air, sand in my hair | Wanderlust | Forever exploring</div>
+                </div>
+                <div class="trending-item">
+                    <div class="trending-bio">💫 Living life through a lens | Photographer | Storyteller</div>
+                </div>
+            </div>
+            
+            <div class="slider-control slider-next">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+        
+        <div class="share-buttons">
+            <a href="javascript:void(0)" class="share-btn whatsapp">
+                <i class="fab fa-whatsapp"></i> Share on WhatsApp
+            </a>
+            <a href="javascript:void(0)" class="share-btn instagram">
+                <i class="fab fa-instagram"></i> Share on Instagram
+            </a>
+            <a href="javascript:void(0)" class="share-btn link">
+                <i class="fas fa-link"></i> Copy Link
+            </a>
+        </div>
+        
+        <div class="footer">
+            Made with <span class="heart">❤️</span> by <a href="javascript:void(0)">CodeCraze</a>
+            <a href="javascript:void(0)"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
+    
+    <div id="copy-success" class="copy-success">
+        <i class="fas fa-check"></i> Copied to clipboard!
+    </div>
+    
+    <!-- JavaScript Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <script id="app-script">
+        // Wait for DOM to be fully loaded
+        $(document).ready(function() {
+            // Variables
+            let bioData = {
+                cute: [
+                    "Just a [NAME] in a world full of roses 🌹✨",
+                    "[NAME]'s little corner of happiness ☁️💕",
+                    "Sprinkling a little bit of [NAME] magic everywhere I go ✨",
+                    "Life is better when you're [NAME] 🦋💫",
+                    "Just [NAME] being [NAME] 🌈💕",
+                    "Sunshine mixed with a little hurricane • [NAME] 🌞🌪️",
+                    "[NAME]: Part human, part cupcake 🧁💖",
+                    "Living in [NAME]'s world and you're all invited 🎀✨",
+                    "Sending [NAME] vibes your way 💫💕",
+                    "Too busy being [NAME] to care 🦄✌️"
+                ],
+                savage: [
+                    "[NAME]: Too spicy for your timeline 🔥👑",
+                    "They call me [NAME] because I'm impossible to forget 💅",
+                    "I'm [NAME]. You've been warned ⚠️💣",
+                    "Doesn't play well with others • [NAME] 😈",
+                    "[NAME]: Currently busy raising my standards 💯",
+                    "Plot twist: [NAME] doesn't care what you think 💭✌️",
+                    "Be [NAME], or be boring 🤷‍♀️🔥",
+                    "When [NAME] walks in, standards go up 👑🔥",
+                    "I'm not [NAME] when I'm hungry 😈🍫",
+                    "Caution: [NAME] has zero tolerance for stupidity ⚠️🙄"
+                ],
+                motivational: [
+                    "Building [NAME]'s empire one dream at a time 🏆✨",
+                    "[NAME]: On a mission to inspire 🚀💫",
+                    "Growing through what I'm going through • [NAME] 🌱",
+                    "Every day is a new page in [NAME]'s story 📖✨",
+                    "[NAME]: Living proof that dreams come true with hard work 💪🌟",
+                    "Creating the life [NAME] deserves 💎🔥",
+                    "[NAME]'s journey: Progress > Perfection 📈✨",
+                    "Becoming the best version of [NAME] 🌱→🌳",
+                    "Chasing dreams with the heart of [NAME] 💫❤️",
+                    "[NAME]: Making yesterday jealous of today 🔥📆"
+                ],
+                funny: [
+                    "Professional napper with a side of [NAME] 😴🤣",
+                    "[NAME]: Allergic to mornings and adulting 🙄☕",
+                    "I put the '[NAME]' in awesome (it's silent) 😎🤪",
+                    "Witty [NAME] caption loading... Error 404 🤦‍♀️💭",
+                    "[NAME]: CEO of overthinking and snack eating 🍕🧠",
+                    "Don't worry, [NAME] can't adult either 🤣👶",
+                    "[NAME]'s life: Organized chaos with a sprinkle of magic ✨🌪️",
+                    "I asked [NAME] for advice and now we're both confused 🤔😂",
+                    "Probably thinking about tacos • [NAME] 🌮💭",
+                    "Warning: [NAME] contains sarcasm & bad jokes 🤣⚠️"
+                ],
+                aesthetic: [
+                    "[NAME] • wanderlust soul • collector of moments ✨🌙",
+                    "• [NAME] • minimal • intentional • present •",
+                    "✧ [NAME] ✧ dreaming in pastel ☁️🌷",
+                    "« [NAME] » between reality and dreams 🕊️🌿",
+                    "◦ [NAME] ◦ soft whispers and gentle souls 🤍",
+                    "• [NAME] • seeking magic in the ordinary ✨🌙",
+                    "⋆｡°✩ [NAME] ✩°｡⋆ cosmic wanderer",
+                    "— [NAME] — finding beauty in simplicity 🤍✨",
+                    "⟡ [NAME] ⟡ honey skies and butterfly kisses 🦋☁️",
+                    "⋒ [NAME] ⋒ ethereal soul in a modern world 🕊️✨"
+                ],
+                custom: [
+                    "This is [NAME]'s world, we're just living in it ✨👑",
+                    "[NAME] • chaotic good • occasionally brilliant 💫",
+                    "Just call me [NAME] • lover of sunsets and good vibes 🌅✌️",
+                    "[NAME] was here • leaving a little sparkle everywhere ✨",
+                    "The one and only [NAME] • accept no substitutes 💯",
+                    "Wild heart, [NAME] soul 🌊💫",
+                    "[NAME]: Half coffee, half human 100% real ☕💯",
+                    "[NAME]'s diary: food, adventures, bad puns 🌮✈️🤣",
+                    "Here for a good time not a long time • [NAME] ⏱️✌️",
+                    "[NAME]: Living with no regrets and poor WiFi 📱✨"
+                ]
+            };
+            
+            let isCustomizing = false;
+            
+            // Initialize elements
+            const $nameInput = $('#name-input');
+            const $categorySelect = $('#category-select');
+            const $generateBtn = $('#generate-btn');
+            const $resultContainer = $('#result-container');
+            const $bioText = $('#bio-text');
+            const $editableBio = $('#editable-bio');
+            const $copyBtn = $('#copy-btn');
+            const $copySuccess = $('#copy-success');
+            const $customizeSwitch = $('.customize-switch');
+            const $customizeHandle = $('.customize-handle');
+            const $profileUsername = $('#profile-username');
+            const $profileBio = $('#profile-bio');
+            const $trendingSlider = $('#trending-slider');
+            const $sliderNext = $('.slider-next');
+            const $sliderPrev = $('.slider-prev');
+            const $toggleMode = $('.toggle-mode');
+            
+            // Set input focus
+            $nameInput.focus();
+            
+            // Event Handlers
+            $generateBtn.on('click', function() {
+                generateBio();
+                
+                // Add button sound effect
+                playSound();
+                
+                // Add button animation
+                $(this).addClass('active');
+                setTimeout(() => $(this).removeClass('active'), 300);
+            });
+            
+            $copyBtn.on('click', function() {
+                let textToCopy = isCustomizing ? $editableBio.text() : $bioText.text();
+                copyToClipboard(textToCopy);
+                
+                $copySuccess.fadeIn(300).delay(1500).fadeOut(300);
+                
+                // Button animation
+                $(this).addClass('active');
+                setTimeout(() => $(this).removeClass('active'), 300);
+            });
+            
+            $('.customize-toggle').on('click', function() {
+                isCustomizing = !isCustomizing;
+                $customizeSwitch.toggleClass('active');
+                
+                if (isCustomizing) {
+                    $editableBio.show().text($bioText.text()).focus();
+                    $bioText.hide();
+                } else {
+                    $bioText.show().text($editableBio.text());
+                    $editableBio.hide();
+                    $profileBio.text($bioText.text());
+                }
+            });
+            
+            $editableBio.on('input', function() {
+                $profileBio.text($(this).text());
+            });
+            
+            $sliderNext.on('click', function() {
+                $trendingSlider.animate({
+                    scrollLeft: $trendingSlider.scrollLeft() + 300
+                }, 300);
+            });
+            
+            $sliderPrev.on('click', function() {
+                $trendingSlider.animate({
+                    scrollLeft: $trendingSlider.scrollLeft() - 300
+                }, 300);
+            });
+            
+            $toggleMode.on('click', function() {
+                $('body').toggleClass('dark-mode');
+            });
+            
+            $('.share-btn').on('click', function() {
+                $(this).addClass('active');
+                setTimeout(() => $(this).removeClass('active'), 300);
+                
+                // This would be connected to real sharing functionality in production
+                alert('This is a prototype. Sharing functionality will be implemented in the full version.');
+            });
+            
+            // Functions
+            function generateBio() {
+                const name = $nameInput.val() || 'You';
+                const category = $categorySelect.val();
+                
+                if (!category) {
+                    alert('Please select a bio category');
+                    return;
+                }
+                
+                // Show the result container with animation
+                $resultContainer.addClass('visible');
+                
+                // Get a random bio from the selected category
+                const bioArray = bioData[category];
+                const randomBio = bioArray[Math.floor(Math.random() * bioArray.length)];
+                
+                // Replace [NAME] placeholder with the entered name
+                const generatedBio = randomBio.replace(/\[NAME\]/g, name);
+                
+                // Update the bio text and preview
+                $bioText.text(generatedBio);
+                $profileBio.text(generatedBio);
+                $profileUsername.text(name.toLowerCase().replace(/\s/g, '_'));
+                
+                // Reset customization if it was active
+                if (isCustomizing) {
+                    isCustomizing = false;
+                    $customizeSwitch.removeClass('active');
+                    $editableBio.hide();
+                    $bioText.show();
+                }
+                
+                // Trigger confetti animation
+                triggerConfetti();
+                
+                // Scroll to the result
+                $('html, body').animate({
+                    scrollTop: $resultContainer.offset().top - 20
+                }, 500);
+            }
+            
+            function copyToClipboard(text) {
+                // Create a temporary textarea to copy from
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            }
+            
+            function triggerConfetti() {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ff7eb9', '#8c52ff', '#5ce1e6', '#ffde59']
+                });
+            }
+            
+            function playSound() {
+                // This would be implemented with an actual sound in production
+                // Using a simple console log for the prototype
+                console.log('Pop sound played');
+            }
+        });
+    </script>
+</body>
+</html>
